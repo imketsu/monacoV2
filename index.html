@@ -257,13 +257,18 @@
                 colors: {
                     'editor.background': '#000000',
                     'editor.foreground': '#ffffff',
-                    'editor.lineHighlightBackground': '#0a0a0a',
+                    'editor.lineHighlightBackground': '#000000',
                     'editorCursor.foreground': '#ffffff',
                     'editor.selectionBackground': '#1a1a1a',
                     'editor.inactiveSelectionBackground': '#0f0f0f',
-                    'editorLineNumber.foreground': '#4b5563',
-                    'editorLineNumber.activeForeground': '#9ca3af',
+                    'editorLineNumber.foreground': '#333333',
+                    'editorLineNumber.activeForeground': '#666666',
                     'minimap.background': '#000000',
+                    'editorGutter.background': '#000000',
+                    'editorOverviewRuler.border': '#000000',
+                    'scrollbarSlider.background': '#00000000',
+                    'scrollbarSlider.hoverBackground': '#00000000',
+                    'scrollbarSlider.activeBackground': '#00000000',
                 }
             });
 
@@ -376,7 +381,10 @@
                 scrollBeyondLastLine: false,
                 lineNumbers: 'on',
                 renderWhitespace: 'none',
-                folding: true,
+                folding: false,
+                glyphMargin: false,
+                lineDecorationsWidth: 0,
+                lineNumbersMinChars: 3,
                 bracketPairColorization: { enabled: true },
                 suggestOnTriggerCharacters: true,
                 quickSuggestions: { other: true, comments: false, strings: true },
@@ -387,13 +395,17 @@
                 formatOnPaste: true,
                 formatOnType: true,
                 smoothScrolling: true,
-                cursorBlinking: 'smooth',
-                cursorSmoothCaretAnimation: 'on',
+                cursorBlinking: 'solid',
+                cursorSmoothCaretAnimation: 'off',
                 mouseWheelZoom: true,
-                padding: { top: 16, bottom: 16 },
+                padding: { top: 8, bottom: 8 },
+                overviewRulerLanes: 0,
+                hideCursorInOverviewRuler: true,
+                overviewRulerBorder: false,
                 scrollbar: {
                     vertical: 'hidden',
-                    horizontal: 'hidden'
+                    horizontal: 'hidden',
+                    useShadows: false
                 }
             });
 
@@ -599,31 +611,32 @@
                 }
             }
         });
-    // ==============================
-    // WEBVIEW BRIDGE (GET / SET LUA)
-    // ==============================
 
-    window.getActiveLuaCode = function () {
-        try {
-            if (!activeTabId || !Array.isArray(tabs)) return "";
-            const tab = tabs.find(t => t.id === activeTabId);
-            if (!tab || !tab.editor) return "";
-            return tab.editor.getValue();
-        } catch {
-            return "";
-        }
-    };
+        // ==============================
+        // WEBVIEW BRIDGE (GET / SET LUA)
+        // ==============================
 
-    window.setActiveLuaCode = function (code) {
-        try {
-            if (!activeTabId || !Array.isArray(tabs)) return;
-            const tab = tabs.find(t => t.id === activeTabId);
-            if (!tab || !tab.editor) return;
-            tab.editor.setValue(code || "");
-            tab.modified = false;
-            renderTabs();
-        } catch {}
-    };
-</script>
+        window.getActiveLuaCode = function () {
+            try {
+                if (!activeTabId || !Array.isArray(tabs)) return "";
+                const tab = tabs.find(t => t.id === activeTabId);
+                if (!tab || !tab.editor) return "";
+                return tab.editor.getValue();
+            } catch {
+                return "";
+            }
+        };
+
+        window.setActiveLuaCode = function (code) {
+            try {
+                if (!activeTabId || !Array.isArray(tabs)) return;
+                const tab = tabs.find(t => t.id === activeTabId);
+                if (!tab || !tab.editor) return;
+                tab.editor.setValue(code || "");
+                tab.modified = false;
+                renderTabs();
+            } catch {}
+        };
+    </script>
 </body>
 </html>
